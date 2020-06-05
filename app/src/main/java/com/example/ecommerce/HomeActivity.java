@@ -26,11 +26,18 @@ import io.paperdb.Paper;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null){
+            type = getIntent().getExtras().get("Admin").toString();
+        }
 
         Paper.init(this);
 
@@ -69,8 +76,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         TextView userNameTextView = headerView.findViewById(R.id.user_profile_name);
         CircleImageView profileImageView = headerView.findViewById(R.id.user_profile_image);
 
-        userNameTextView.setText(Prevalent.currentOnlineUsers.getName());
-        Picasso.get().load(Prevalent.currentOnlineUsers.getImage()).placeholder(R.drawable.profile).into(profileImageView);
+        if (!type.equals("Admin")){
+
+            userNameTextView.setText(Prevalent.currentOnlineUsers.getName());
+            Picasso.get().load(Prevalent.currentOnlineUsers.getImage()).placeholder(R.drawable.profile).into(profileImageView);
+
+        }
 
 
     }

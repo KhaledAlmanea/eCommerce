@@ -25,7 +25,6 @@ import com.squareup.picasso.Picasso;
 
 public class SearchFragment extends Fragment {
 
-
     private Button SearchBtn;
     private EditText inputText;
     private RecyclerView searchList;

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,7 +14,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ecommerce.AdminMaintainProductsActivity;
 import com.example.ecommerce.Model.Products;
+import com.example.ecommerce.Prevalent.Prevalent;
 import com.example.ecommerce.R;
 import com.example.ecommerce.ui.ProductDetailsActivity;
 import com.example.ecommerce.ui.cart.CartFragment;
@@ -25,15 +28,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private String type = "";
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Intent intent = getActivity().getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null){
+            type = getActivity().getIntent().getExtras().get("Admin").toString();
+        }
 
         DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Products");
 
@@ -64,9 +76,18 @@ public class HomeFragment extends Fragment {
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
-                                intent.putExtra("pid", model.getPid());
-                                startActivity(intent);
+                                if (type.equals("Admin")){
+
+                                    Intent intent = new Intent(getActivity(), AdminMaintainProductsActivity.class);
+                                    intent.putExtra("pid", model.getPid());
+                                    startActivity(intent);
+                                }
+                                else {
+                                    Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
+                                    intent.putExtra("pid", model.getPid());
+                                    startActivity(intent);
+                                }
+
                             }
                         });
                     }
